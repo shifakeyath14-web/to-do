@@ -24,102 +24,101 @@
     <ul id="task" class="flex flex-col gap-2"></ul>
    </div>
     
-      <script>
-        function addtask()
-        {
-            
-            let input =document.getElementById("input");
-            let x=input.value;
+    <script>
 
-            let y = document.createElement("li");
+            renderTools();
+            function renderTools(){
+                let ul=document.getElementById("task");
+                ul.innerHTML="";
+
+                let todos=JSON.parse(localStorage.getItem("todos")) || [];
+                
+
+                todos.forEach(todo => {
+
+                    let list = document.createElement("li");
+                    ul.appendChild(list); 
+            
+                    
+                    let div=document.createElement("div");
+                    div.classList.add("bg-gray-400","h-20","w-90","rounded-sm","font-serif","text-2xl","shadow-md","flex","items-center","gap-2","md:w-110","lg:w-140");
+                    
+
+                    let box=document.createElement("input");
+                    box.classList.add("w-10","h-10","flex","items-center","gap-3","px-3");
+                    box.type="checkbox";
+
+                    let text=document.createElement("span");
+                    text.textContent=todo;
+
+                    let edit=document.createElement("button");
+                    edit.innerHTML='<i class="fas fa-edit"></i>';
+                    edit.classList.add("ml-auto","items-center","px-1");
+                    
+
+                    let cross=document.createElement("button");
+                    cross.innerHTML='<i class="fa fa-times"></i>';
+                    cross.classList.add("px-3");
+                    
+                    div.appendChild(box);
+                    div.appendChild(text);
+                    div.appendChild(edit);
+                    div.appendChild(cross);
+                    ul.appendChild(div);
+
+                    
+                    box.addEventListener('change',function(){
+                        if( box.checked){
+                            text.classList.add("line-through");
+                        }
+                        else{
+                            text.classList.remove("line-through");
+                        }
+                    });
+
+                    edit.addEventListener('click',function(){
+                        let inputBox=document.createElement("input");
+                        inputBox.classList.add("h-10","w-50","bg-gray-300","border-2","rounded-md","md:w-70","lg:w-100");
+                        inputBox.value=text.textContent;
            
-            let u=document.getElementById("task");
-            u.appendChild(y);
-
-            if(input.value.trim()==="")
-        {
-            return;
-        }
-            input.value="";
-            
-            
-
-            let div=document.createElement("div");
-            div.classList.add("bg-gray-400","h-20","w-90","rounded-sm","font-serif","text-2xl","shadow-md","flex","items-center","gap-2","md:w-110","lg:w-140");
-            u.appendChild(div);
-            
-
-
-
-            let text=document.createElement("span");
-            text.textContent=x;
-
-            let box=document.createElement("input");
-            div.appendChild(box);
-            div.appendChild(text);
-            box.classList.add("w-10","h-10","flex","items-center","gap-3","px-3");
-            box.type="checkbox";
-            
-            let edit=document.createElement("button");
-            edit.innerHTML='<i class="fas fa-edit"></i>';
-            edit.classList.add("ml-auto","items-center","px-1");
-            div.appendChild(edit);
-
-            let cross=document.createElement("button");
-            cross.innerHTML='<i class="fa fa-times"></i>';
-
-            cross.classList.add("px-3");
-            div.appendChild(cross);
-            
-
-            box.addEventListener('change',function(){
-                if( box.checked){
-                    text.classList.add("line-through");
-                }
-                else{
-                    text.classList.remove("line-through");
-                }
-                
-            });
-            
-
-            
-            cross.addEventListener('click',function(){
-      
-                div.remove();  
-          
-            }) 
-
-                let inputBox=document.createElement("input");
-                
-                edit.addEventListener('click',function(){
-                    if(inputBox==true){
-                        
-                    }
-                inputBox.value=text.textContent;
-                
-                inputBox.classList.add("h-10","w-90","bg-gray-300","border-2","rounded-md");
-                div.appendChild(inputBox);
-                div.replaceChild(inputBox,text);
-                inputBox.focus();
-
+                        div.replaceChild(inputBox,text);
+                        inputBox.focus();
+                        div.appendChild(inputBox);
                  
-                inputBox.addEventListener("keydown",function(event){
-                    if(event.key=="Enter")
-                    {
-                        
-                        text.textContent=inputBox.value;
-                        div.replaceChild(text,inputBox);
-                        
-                    }
-                });
-                
-             
-                
+                        inputBox.addEventListener("keydown",function(event){
+                            if(event.key=="Enter")
+                            {
+                                text.textContent=inputBox.value;
+                                div.replaceChild(text,inputBox);
+                                
+                               
+                            }
+                        });  
+                    });
+                    
+                    cross.addEventListener('click',function(){
+                        div.remove();  
+          
+                    }); 
 
-            });
+                });   
+            }
+
+        
+            function addtask()
+        {
+            let input =document.getElementById("input");
+            let value=input.value;
+
+            if(input.value.trim()==="")return;
+
+            let todos=JSON.parse(localStorage.getItem("todos")) || [];
+            todos.push(value);
+            localStorage.setItem("todos",JSON.stringify(todos));    
+            input.value="";
+            renderTools();
+     
             
         }
+        
     </script>
-</body>
-</html>
