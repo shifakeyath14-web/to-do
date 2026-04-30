@@ -1,124 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-       
+
 
     </style>
 </head>
-<body class="relative bg-pink-200 " >
-  
 
-   <div class="w-80 h-80 bg-pink-600 rounded-lg shadow-xl absolute top-80 left-5    md:w-110 md:h-110 md:top-70 md:left-10 lg:w-130 lg:h-130 lg:top-55 ">
-    <p class=" font-bold text-2xl font-serif  absolute left-28 top-10 md:text-3xl md:left-36 md:left-40 md:top-15 lg:left-44 lg:text-5xl  lg:top-25">TO-DO</p>
-    <input id="input" type="text" class="w-76 h-11 bg-pink-200 rounded-md border-2 absolute top-30 left-2 md:w-105 md:h-15 md:top-40  lg:w-126 lg:h-18 lg:top-55  " placeholder="Type your activities....">
-    <button id="button" class="w-76 h-13 bg-pink-400 rounded-lg border-2 absolute top-45 left-2 font-serif text-2xl md:w-105 md:h-16 md:top-60 lg:w-126 lg:h-20 lg:top-80 " onclick="addtask()">Add</button>
-   </div>
-    
-   <div class="w-90 h-100 bg-rose-300 rounded-lg shadow-xl absolute top-70 left-90  md:w-110 md:h-130 md:top-60 md:left-130  lg:left-160 lg:w-140 lg:h-160 lg:top-40">
-    <ul id="task" class="flex flex-col gap-2"></ul>
-   </div>
-    
+<body class="relative bg-pink-200 ">
+
+
+    <div
+        class="w-80 h-80 bg-pink-600 rounded-lg shadow-xl absolute top-80 left-5    md:w-110 md:h-110 md:top-70 md:left-10 lg:w-130 lg:h-130 lg:top-55 ">
+        <p
+            class=" font-bold text-2xl font-serif  absolute left-28 top-10 md:text-3xl md:left-36 md:left-40 md:top-15 lg:left-44 lg:text-5xl  lg:top-25">
+            TO-DO</p>
+        <input id="input" type="text"
+            class="w-76 h-11 bg-pink-200 rounded-md border-2 absolute top-30 left-2 md:w-105 md:h-15 md:top-40  lg:w-126 lg:h-18 lg:top-55  "
+            placeholder="Type your activities....">
+        <button id="button"
+            class="w-76 h-13 bg-pink-400 rounded-lg border-2 absolute top-45 left-2 font-serif text-2xl md:w-105 md:h-16 md:top-60 lg:w-126 lg:h-20 lg:top-80 "
+            onclick="addtask()">Add</button>
+    </div>
+
+    <div
+        class="w-90 h-100 bg-rose-300 rounded-lg shadow-xl absolute top-70 left-90  md:w-110 md:h-130 md:top-60 md:left-130  lg:left-160 lg:w-140 lg:h-160 lg:top-40">
+        <ul id="task" class="flex flex-col gap-2"></ul>
+    </div>
+
     <script>
+        renderTools();
 
+        function addtask() {
+
+            let input = document.getElementById("input");
+            let value = input.value;
+            if (input.value.trim() === "") return;
+
+            input.value = "";
             renderTools();
-            function renderTools(){
-                let ul=document.getElementById("task");
-                ul.innerHTML="";
+        }
 
-                let todos=JSON.parse(localStorage.getItem("todos")) || [];
-                
 
-                todos.forEach(todo => {
 
-                    let list = document.createElement("li");
-                    ul.appendChild(list); 
-            
-                    
-                    let div=document.createElement("div");
-                    div.classList.add("bg-gray-400","h-20","w-90","rounded-sm","font-serif","text-2xl","shadow-md","flex","items-center","gap-2","md:w-110","lg:w-140");
-                    
+        function renderTools() {
+            fetch('https://dummyjson.com/todos')
+                .then(res => res.json())
+                .then(data => {
+                    let u = document.getElementById("task");
+                    u.innerHTML = "";
+                    data.todos.forEach((todo, index) => {
+                        let div = document.createElement("div");
+                        div.classList.add("bg-gray-400", "h-20", "w-90", "rounded-sm", "font-serif", "text-2xl", "shadow-md", "flex", "items-center", "gap-2", "md:w-110", "lg:w-140");
 
-                    let box=document.createElement("input");
-                    box.classList.add("w-10","h-10","flex","items-center","gap-3","px-3");
-                    box.type="checkbox";
+                        let box = document.createElement("input");
+                        box.classList.add("w-10", "h-10", "flex", "items-center", "gap-3", "px-3");
+                        box.type = "checkbox";
 
-                    let text=document.createElement("span");
-                    text.textContent=todo;
+                        let text = document.createElement("span");
+                        text.textContent = todo.todo;
 
-                    let edit=document.createElement("button");
-                    edit.innerHTML='<i class="fas fa-edit"></i>';
-                    edit.classList.add("ml-auto","items-center","px-1");
-                    
-
-                    let cross=document.createElement("button");
-                    cross.innerHTML='<i class="fa fa-times"></i>';
-                    cross.classList.add("px-3");
-                    
-                    div.appendChild(box);
-                    div.appendChild(text);
-                    div.appendChild(edit);
-                    div.appendChild(cross);
-                    ul.appendChild(div);
-
-                    
-                    box.addEventListener('change',function(){
-                        if( box.checked){
+                        box.checked = todo.completed;
+                        if (todo.completed) {
                             text.classList.add("line-through");
                         }
-                        else{
-                            text.classList.remove("line-through");
-                        }
-                    });
 
-                    edit.addEventListener('click',function(){
-                        let inputBox=document.createElement("input");
-                        inputBox.classList.add("h-10","w-50","bg-gray-300","border-2","rounded-md","md:w-70","lg:w-100");
-                        inputBox.value=text.textContent;
-           
-                        div.replaceChild(inputBox,text);
-                        inputBox.focus();
-                        div.appendChild(inputBox);
-                 
-                        inputBox.addEventListener("keydown",function(event){
-                            if(event.key=="Enter")
-                            {
-                                text.textContent=inputBox.value;
-                                div.replaceChild(text,inputBox);
-                                
-                               
+
+                        let edit = document.createElement("button");
+                        edit.innerHTML = '<i class="fas fa-edit"></i>';
+                        edit.classList.add("ml-auto", "items-center", "px-1");
+
+
+                        let cross = document.createElement("button");
+                        cross.innerHTML = '<i class="fa fa-times"></i>';
+                        cross.classList.add("px-3");
+
+                        div.appendChild(box);
+                        div.appendChild(text);
+                        div.appendChild(edit);
+                        div.appendChild(cross);
+                        u.appendChild(div);
+
+
+                        box.addEventListener('change', function () {
+                            todo.completed = box.checked;
+                            if (todo.completed) {
+
+                                text.classList.add("line-through");
+
                             }
-                        });  
-                    });
-                    
-                    cross.addEventListener('click',function(){
-                        div.remove();  
-          
-                    }); 
+                            else {
+                                text.classList.remove("line-through");
+                            }
 
-                });   
-            }
 
-        
-            function addtask()
-        {
-            let input =document.getElementById("input");
-            let value=input.value;
+                        });
+                    })
 
-            if(input.value.trim()==="")return;
 
-            let todos=JSON.parse(localStorage.getItem("todos")) || [];
-            todos.push(value);
-            localStorage.setItem("todos",JSON.stringify(todos));    
-            input.value="";
-            renderTools();
-     
-            
+
+                    edit.addEventListener('click', function () {
+                        console.log(todo.id);
+                        let inputBox = document.createElement("input");
+                        inputBox.classList.add("h-10", "w-90", "bg-gray-300", "border-2", "rounded-md");
+
+                        inputBox.value = text.textContent;
+
+                        div.replaceChild(inputBox, text);
+                        inputBox.focus();
+
+                        inputBox.addEventListener("keydown", function (event) {
+                            if (event.key == "Enter") {
+                                fetch(`https://dummyjson.com/todos/${todo.id}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        todo: inputBox.value,
+                                        completed: false,
+                                    })
+                                })
+
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        todo.todo = inputBox.value;
+                                        text.textContent = inputBox.value;
+                                        div.replaceChild(text, inputBox);
+                                    })
+
+
+
+
+                            }
+                        });
+                    })
+                })
+            cross.addEventListener('click', function () {
+                console.log(todo.id);
+                fetch(`https://dummyjson.com/todos/${todo.id}`, {
+                    method: 'DELETE'
+
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        div.remove();
+                        todos.splice(index, 1);
+                    })
+
+            })
+
+
+
+
+
+
+
+
         }
-        
+
     </script>
+</body>
+
+</html>
