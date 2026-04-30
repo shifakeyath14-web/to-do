@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>auth</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script scr="./src/main.js"></script>
+</head>
+
+<body class='relative bg-olive-50'>
+    <div id="login-container">
+        <form id="form"
+            class="absolute left-25 top-70 bg-olive-300 h-80 w-140 rounded-md shadow-xl  md:left-45 md:h-100 md:w-150 md:top-60 lg:w-160 lg:h-120 lg:top-50 lg:left-85 lg:w-190">
+            <label for="name"
+                class="font-mono text-xl  absolute top-12 left-10 md:text-2xl md:top-14 lg:top-22 lg:text-3xl ">username</label>
+            <input id="username" type="text"
+                class="h-10 w-80 border-2 hover:bg-olive-200 rounded-md absolute left-35 top-10 border-olive-400 md:h-13 md:w-100 md:left-40 lg:top-20 lg:w-120 lg:left-47  "
+                placeholder=" Enter your name.">
+            <label for="password"
+                class="font-mono text-xl  absolute top-30 left-10 md:text-2xl md:top-37 lg:top-47 lg:text-3xl ">Password</label>
+            <input id="password" type="text"
+                class="h-10 w-80 border-2 hover:bg-olive-200 rounded-md absolute left-35 top-28 border-olive-400 md:h-13 md:w-100 md:left-40 md:top-34 lg:top-44 lg:w-120 lg:left-47 "
+                placeholder=" Enter your password.">
+            <button
+                class="h-13 w-70 rounded-xl bg-olive-800 absolute top-55 left-35  font-mono text-xl text-olive-300 md:h-15 md:w-85 md:text-2xl md:left-45 md:top-65 lg:top-80 lg:text-4xl  lg:h-18 lg:w-95 lg:left-55"
+                l>Login</button>
+        </form>
+    </div>
+    <div id="profile"
+        class=" hidden absolute left-25 top-30 bg-olive-300 h-140 w-140 rounded-md shadow-xl  md:left-35 md:h-160 md:w-180 md:top-25 lg:w-160 lg:h-180 lg:top-15 lg:left-85 lg:w-200">
+        <div class=" w-30 h-30 rounded-4xl bg-olive-600 absolute top-10 left-100  md:w-40 md:h-40 md:top-10 md:left-130 lg:left-140 lg:w-45 lg:h-45 lg:top-10 ">
+            <img id="p-image" alt="Profile Picture" class="absolute md:left-4 md:top-4 lg:left-7 lg:top-7">
+        </div>
+        <div id="username-box"
+            class="bg-olive-600  h-10 w-130 absolute top-50 left-5  rounded-md md:w-160 md:h-12 md:top-65 md:left-10 lg:w-180 lg:h-15 lg:left-10 lg:top-65 ">
+            <label for="username-box"
+                class=" bg-olive-600 absolute text-olive-200 text-md top-2 left-2 font-mono  md:top-3 md:left-2 md:text-xl lg:top-3 lg:left-3  lg:text-2xl ">Username:
+                <span id="p-username"></span></label>
+        </div>
+        <div id="name"
+            class="bg-olive-600  h-10 w-130 absolute top-70 left-5  rounded-md md:w-160 md:h-12 md:top-85 md:left-10 lg:w-180 lg:h-15 lg:left-10 lg:top-90 ">
+            <label for="name"
+                class=" bg-olive-600 absolute text-olive-200 text-md top-2 left-2 font-mono  md:top-3 md:left-2 md:text-xl lg:top-3 lg:left-3  lg:text-2xl ">Name:
+                <span id="p-name"></span></label>
+        </div>
+        <div id="email"
+            class="bg-olive-600  h-10 w-130 absolute top-90 left-5  rounded-md md:w-160 md:h-12 md:top-105 md:left-10 lg:w-180 lg:h-15 lg:left-10 lg:top-115 ">
+            <label for="email"
+                class=" bg-olive-600 absolute text-olive-200 text-md top-2 left-2 font-mono  md:top-3 md:left-2 md:text-xl lg:top-3 lg:left-3  lg:text-2xl ">Email:
+                <span id="p-email"></span></label>
+        </div>
+        <div id="gender"
+            class="bg-olive-600  h-10 w-130 absolute top-110 left-5  rounded-md md:w-160 md:h-12 md:top-125 md:left-10 lg:w-180 lg:h-15 lg:left-10 lg:top-140 ">
+            <label for="gender"
+                class=" bg-olive-600 absolute text-olive-200 text-md top-2 left-2 font-mono  md:top-3 md:left-2 md:text-xl lg:top-3 lg:left-3  lg:text-2xl ">Gender:<span
+                    id="p-gender"></span></label>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+<script>
+    function fetchPost(username, password) {
+        return fetch('https://dummyjson.com/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                expiresInMins: 1,
+            }),
+            credentials: 'include'
+        })
+            .then(res => res.json())
+    }
+
+
+    const form = document.getElementById('form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (password.trim() === '' || username.trim() === '') {
+            console.log('ey');
+            alert("all fileds are mandatory");
+            return;
+
+        }
+
+        fetchPost(username, password)
+            .then(data => {
+
+                if (data.message) {
+                    alert('invalid');
+                }
+                else {
+
+                    alert('success');
+                    localStorage.setItem('token', data.accessToken);
+                    document.getElementById('login-container').style.display = "none";
+                    document.getElementById('profile').style.display = "block";
+                    fetchGet()
+                        .then(data => {
+                            document.getElementById("p-image").src = data.image;
+                            document.getElementById("p-username").textContent = data.username;
+                            document.getElementById("p-name").textContent = data.firstName + "" + data.lastName;
+                            document.getElementById("p-email").textContent = data.email;
+                            document.getElementById("p-gender").textContent = data.gender;
+                        })
+
+                }
+            })
+    })
+
+
+    function fetchGet() {
+        let token = localStorage.getItem("token");
+        return fetch('https://dummyjson.com/auth/me', {
+            method: 'GET',
+            headers: {
+
+                Authorization: 'Bearer ' + token
+            },
+            credentials: "include"
+        })
+            .then(res => res.json())
+    }
+
+
+
+
+
+
+</script>
+
+</html>
